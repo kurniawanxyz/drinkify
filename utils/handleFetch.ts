@@ -1,6 +1,8 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { ResponseJson } from "../type/ResponseJson";
 import Toast from "react-native-toast-message";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { router } from "expo-router";
 
 export default async function handleFetch<T>(
   url: string,
@@ -15,12 +17,39 @@ export default async function handleFetch<T>(
       ...configuration.headers,
       'Content-Type': 'multipart/form-data',
     };
-  }else{
+  } else {
     configuration.headers = {
       ...configuration.headers,
       'Content-Type': 'application/json',
     };
   }
+
+  const token = await AsyncStorage.getItem("access_token")
+  const expired_at = await AsyncStorage.getItem("expired_at")
+  const today = new Date();
+  if (expired_at) {
+    const expiredDate = new Date(parseInt(expired_at));
+    if (
+      expiredDate.getFullYear() === today.getFullYear() &&
+      expiredDate.getMonth() === today.getMonth() &&
+      expiredDate.getDate() === today.getDate()
+    ) {
+
+      await AsyncStorage.removeItem("access_token")
+      await AsyncStorage.removeItem("expired_at")
+      router.push("/login");
+    }
+  }
+
+
+  if (token) {
+    configuration.headers = {
+      ...configuration.headers,
+      'Authorization': `Bearer ${token}`,
+    };
+  }
+
+
 
   return await axios<ResponseJson<T>>(apiUrl, configuration)
     .then(response => {
@@ -47,29 +76,29 @@ export default async function handleFetch<T>(
       return response.data;
     })
     .catch(error => {
-        console.log(error.response.data.errors)
-        if(error.status == "422"){
-            for (const key in error.response.data.errors) {
-                if (Object.prototype.hasOwnProperty.call(error.response.data.errors, key)) {
-                    const element = error.response.data.errors[key];
-                    Toast.show({
-                      text1: (`${key}`),
-                      text2: element,
-                      type: 'error',
-                    });
-                    
-                }
-            }
-
-        }else{
-            const errorMessage = error?.response?.data?.message || "An unexpected error occurred.";
+      console.log(error.response.data.errors)
+      if (error.status == "422") {
+        for (const key in error.response.data.errors) {
+          if (Object.prototype.hasOwnProperty.call(error.response.data.errors, key)) {
+            const element = error.response.data.errors[key];
             Toast.show({
-              text1: "Error",
-              text2: errorMessage,
+              text1: (`${key}`),
+              text2: element,
               type: 'error',
             });
+
+          }
         }
-        // Handle any network or Axios errors
+
+      } else {
+        const errorMessage = error?.response?.data?.message || "An unexpected error occurred.";
+        Toast.show({
+          text1: "Error",
+          text2: errorMessage,
+          type: 'error',
+        });
+      }
+      // Handle any network or Axios errors
 
       // Optionally throw the error if needed or return a fallback value
       throw error;

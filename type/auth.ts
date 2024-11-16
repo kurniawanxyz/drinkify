@@ -5,3 +5,8 @@ export type Register = {
 }
 
 export type Login = Omit<Register, "name">
+
+export type LoginResponse = {
+    token: string,
+    expired_at: string,
+}
