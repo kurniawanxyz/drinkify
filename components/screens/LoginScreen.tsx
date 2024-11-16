@@ -1,10 +1,31 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {  Heading, Image, Input, Text, View, YStack } from 'tamagui'
 import { LogoImg } from '../../assets'
-import { Link } from 'expo-router'
+import { Link, router } from 'expo-router'
 import { Button } from '../elements'
+import { handleFetch } from '../../utils'
 
 export default function LoginScreen() {
+    const [data, setData] = useState({
+        email:'',
+        password:''
+    })
+
+    async function handleRegister(){
+        try {
+            const response = await handleFetch<null>("/auths/register",{
+                method: "POST",
+                data: data,
+            })
+            if(response.success){
+                return router.push("/")
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
   return (
     <View
         width={"100%"}
