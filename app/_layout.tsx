@@ -1,5 +1,6 @@
 import { Stack } from "expo-router";
 import { ExpoTamaguiProvider } from "../providers";
+import Toast from "react-native-toast-message";
 
 
 export default function RootLayout() {
@@ -16,8 +17,12 @@ export default function RootLayout() {
 
             <Stack.Screen
               name="register"
+              options={{
+                animation: "fade_from_bottom"
+              }}
             />
         </Stack>
+        <Toast/>
     </ExpoTamaguiProvider>
   )
 }
