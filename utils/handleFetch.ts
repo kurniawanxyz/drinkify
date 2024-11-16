@@ -6,7 +6,7 @@ import { router } from "expo-router";
 
 export default async function handleFetch<T>(
   url: string,
-  config: AxiosRequestConfig | null,
+  config?: AxiosRequestConfig | null,
   isForm: boolean = false
 ): Promise<ResponseJson<T>> {
   const apiUrl = process.env.EXPO_PUBLIC_API + url;

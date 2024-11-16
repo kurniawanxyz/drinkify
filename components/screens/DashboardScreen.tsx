@@ -1,10 +1,16 @@
-import { View } from "tamagui";
+import { ScrollView, View, YStack } from "tamagui";
+import { WelcomeSection } from "../fragments";
 
 
 export default function DashboardScreen() {
   return (
-    <View>
-        
-    </View>
+    <ScrollView
+      paddingHorizontal={30}
+      paddingVertical={20}
+    >
+        <YStack>
+          <WelcomeSection/>
+        </YStack>
+    </ScrollView>
   )
 }
