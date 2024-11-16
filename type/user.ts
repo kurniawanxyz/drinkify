@@ -8,5 +8,8 @@ export type User = {
     email: string,
     daily_goals: DailyGoal[],
     goals_today: DailyGoal | null,
-    reminders: Reminder[]
+    reminders: Reminder[],
+    goals_success: number,
+    goals_failed: number,
+    average_water_intakes: number,
 }

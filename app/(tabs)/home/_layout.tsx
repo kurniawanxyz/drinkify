@@ -23,6 +23,15 @@ export default function HomeLayout() {
                 animation: "slide_from_bottom"
             }}
          />
+        <Stack.Screen
+            name='history/[id]'
+            
+            options={{
+                title: "Detail Goals",
+                presentation:"modal",
+                animation: "slide_from_bottom"
+            }}
+         />
 
          
     </Stack>

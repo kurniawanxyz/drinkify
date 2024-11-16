@@ -19,3 +19,12 @@ export function useAddTodayGoals()
         onSuccess: ()=> queryClient.invalidateQueries({queryKey:["user"]})
     })
 }
+
+export function useDeleteGoalToday()
+{
+    return useMutation({
+        mutationKey: ["user"],
+        mutationFn: (id: string)=> handleFetch("/daily-goals/"+id,{method:"DELETE"}),
+        onSuccess: ()=> queryClient.invalidateQueries({queryKey:["user"]})
+    })
+}

@@ -53,7 +53,7 @@ export default function ListDailyGoals() {
                                 alignItems='center'
                             >
                                 <Text>{format(item.created_at, "EEEE, dd MMMM yyyy")}</Text>
-                                <Button onPress={()=> router.push("/home/daily_goal/"+item.id)}>Detail</Button>
+                                <Button onPress={()=> router.push("/home/history/"+item.id)}>Detail</Button>
                             </XStack>
                         ))
                     }

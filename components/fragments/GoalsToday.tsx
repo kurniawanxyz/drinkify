@@ -1,5 +1,5 @@
 import { Image, Text, View, XStack, YStack } from "tamagui";
-import { useUser } from "../../hooks/useUser";
+import { useDeleteGoalToday, useUser } from "../../hooks/useUser";
 import { DailyGoal } from "../../type/DailyGoal";
 import { Button } from "../elements";
 import { galonImg } from "../../assets";
@@ -7,6 +7,12 @@ import { router } from "expo-router";
 
 export default function GoalsToday() {
     const { isSuccess, data } = useUser()
+    const deleteGoal = useDeleteGoalToday()
+
+    function handleDeleteGoal(id: string){
+        deleteGoal.mutate(id)
+    }
+
     console.log(data?.data?.daily_goals)
     if (data?.data?.goals_today === null) {
         return (
@@ -68,8 +74,19 @@ export default function GoalsToday() {
                     flex={1}
                     flexDirection="row"
                 >
-                    <Button width={"40%"} onPress={()=>router.push("/home/create")} mt={10}>Atur</Button>
-                    <Button width={"40%"} onPress={()=>router.push("/home/daily_goal/"+goal.id)} mt={10}>Detail</Button>
+                    <Button onPress={()=>router.push("/home/create")} mt={10}>Atur</Button>
+                    <Button 
+                        backgroundColor={"$yellow10Light"}
+                        pressStyle={{
+                            backgroundColor: "$yellow11Light"
+                        }}
+                    onPress={()=>router.push("/home/daily_goal/"+goal.id)} mt={10}>Detail</Button>
+                    <Button 
+                        backgroundColor={"$red11Light"} 
+                        pressStyle={{
+                            backgroundColor: "$red11Light"
+                        }}
+                        onPress={()=>handleDeleteGoal(String(goal.id))} mt={10}>Delete</Button>
                     {/* <Button onPress={()=>router.push("/home/create")} mt={10}>Atur Daily goals</Button> */}
                 </XStack>
             </YStack>

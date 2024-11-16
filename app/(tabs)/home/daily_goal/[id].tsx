@@ -1,6 +1,6 @@
 import { router, useLocalSearchParams } from 'expo-router'
 import { Card, Input, ScrollView, Text, View } from 'tamagui'
-import { useDetailDailyGoal } from '../../../../hooks/useDailyGoal'
+import { useDeleteWaterIntake, useDetailDailyGoal } from '../../../../hooks/useDailyGoal'
 import { Button } from '../../../../components';
 import { useAddWaterIntake } from '../../../../hooks/useWaterIntake';
 import { useState } from 'react';
@@ -11,6 +11,7 @@ export default function DetailDailyGoalId() {
   const {id} = useLocalSearchParams()
   const {data, isSuccess} = useDetailDailyGoal(String(id));
   const { mutate } = useAddWaterIntake(String(id))
+  const waterIntake = useDeleteWaterIntake(String(id))
   const [amount, setAmount] = useState(0);
 
   function handleSubmit(){
@@ -20,6 +21,9 @@ export default function DetailDailyGoalId() {
 
     router.push("/home")
   }
+    function handleDelete(id: string){
+      waterIntake.mutate(id)
+    }
 
   if(isSuccess){
     return (
@@ -34,7 +38,7 @@ export default function DetailDailyGoalId() {
           </View>
         </Card>
         <View
-          padding={20}
+          mt={30}
           pb={50}
           gap={10}
         >
@@ -42,12 +46,15 @@ export default function DetailDailyGoalId() {
               data.data?.water_intakes.map((item)=>(
                 <Card
                   padding={10}
+                  paddingHorizontal={15}
                   flex={1}
                   flexDirection='row'
+                  alignItems='center'
                   justifyContent='space-between'
                 >
-                  <Text w={"50%"}>{format(item.created_at,"k:m a")}</Text>
-                  <Text w={"50%"}>{item.amount} ml</Text>
+                  <Text>{format(item.created_at,"k:m a")}</Text>
+                  <Text>{item.amount} ml</Text>
+                  <Button onPress={()=>handleDelete(String(item.id))}>Delete</Button>
                 </Card>
               ))
             }
