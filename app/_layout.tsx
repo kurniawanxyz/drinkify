@@ -12,7 +12,7 @@ export default function RootLayout() {
     (async()=>{
       const token = await AsyncStorage.getItem("access_token");
       if(token){
-        router.push("/user")
+        router.push("(tabs)/home")
       }  
     })()
   })
@@ -34,6 +34,9 @@ export default function RootLayout() {
                 options={{
                   animation: "fade_from_bottom"
                 }}
+              />
+              <Stack.Screen
+                name="(tabs)"
               />
           </Stack>
           <Toast/>

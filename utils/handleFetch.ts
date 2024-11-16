@@ -7,7 +7,8 @@ import { router } from "expo-router";
 export default async function handleFetch<T>(
   url: string,
   config?: AxiosRequestConfig | null,
-  isForm: boolean = false
+  isForm: boolean = false,
+  isShowToas: boolean = true,
 ): Promise<ResponseJson<T>> {
   const apiUrl = process.env.EXPO_PUBLIC_API + url;
   let configuration: AxiosRequestConfig = config || { method: "GET" };
@@ -55,11 +56,13 @@ export default async function handleFetch<T>(
     .then(response => {
       // Check if the status code is in the successful range (2xx)
       if (response.status >= 200 && response.status < 300) {
-        Toast.show({
-          text1: "Success",
-          text2: response.data.message,
-          type: 'success',
-        });
+        if(isShowToas){
+          Toast.show({
+            text1: "Success",
+            text2: response.data.message,
+            type: 'success',
+          });
+        }
       } else {
         // Handle unsuccessful responses (non-2xx status)
         const errorMessage = typeof response.data.errors !== "string"

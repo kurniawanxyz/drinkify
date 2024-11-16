@@ -14,6 +14,7 @@
     "@tamagui/config": "^1.116.14",
     "@tanstack/react-query": "^5.60.2",
     "axios": "^1.7.7",
+    "date-fns": "^4.1.0",
     "expo": "~52.0.5",
     "expo-constants": "~17.0.2",
     "expo-font": "~13.0.1",
