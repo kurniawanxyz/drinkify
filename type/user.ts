@@ -6,7 +6,6 @@ export type User = {
     id: string,
     name: string,
     email: string,
-    water_intakes: WaterIntake[],
     daily_goals: DailyGoal[],
     goals_today: DailyGoal | null,
     reminders: Reminder[]

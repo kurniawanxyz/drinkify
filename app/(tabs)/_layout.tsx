@@ -20,6 +20,12 @@ export default function UserLayout() {
           title: 'Reminder',
         }}
       />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: 'Profile',
+        }}
+      />
     </Tabs>
   );
 }

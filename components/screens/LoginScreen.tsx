@@ -24,7 +24,7 @@ export default function LoginScreen() {
             if (response.success) {
              await AsyncStorage.setItem("access_token", response.data?.token as string)
              await AsyncStorage.setItem("expired_at", response.data?.expired_at as string)
-             return router.push("(tabs)")
+             return router.push("(tabs)/home")
             }
         } catch (error) {
             console.log(error)

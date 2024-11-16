@@ -7,8 +7,9 @@ export default function DashboardScreen() {
     <ScrollView
       paddingHorizontal={30}
       paddingVertical={20}
+      minHeight={"120%"}
     >
-        <YStack>
+        <YStack paddingBottom={200}>
           <WelcomeSection/>
           <GoalsToday/>
           <ListDailyGoals/>

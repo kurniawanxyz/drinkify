@@ -38,7 +38,7 @@ export default async function handleFetch<T>(
 
       await AsyncStorage.removeItem("access_token")
       await AsyncStorage.removeItem("expired_at")
-      router.push("/login");
+      router.push("/");
     }
   }
 
@@ -78,8 +78,8 @@ export default async function handleFetch<T>(
 
       return response.data;
     })
-    .catch(error => {
-      console.log(error.response.data.errors)
+    .catch(async error => {
+      console.log(error.response.data)
       if (error.status == "422") {
         for (const key in error.response.data.errors) {
           if (Object.prototype.hasOwnProperty.call(error.response.data.errors, key)) {
@@ -93,6 +93,10 @@ export default async function handleFetch<T>(
           }
         }
 
+      } else if(error.status == "401"){
+        await AsyncStorage.removeItem("access_token");
+        await AsyncStorage.removeItem("expired_at");
+        router.push("/")
       } else {
         const errorMessage = error?.response?.data?.message || "An unexpected error occurred.";
         Toast.show({

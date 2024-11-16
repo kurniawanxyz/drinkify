@@ -14,6 +14,17 @@ export default function HomeLayout() {
                 animation: "slide_from_bottom"
             }}
          />
+        <Stack.Screen
+            name='daily_goal/[id]'
+            
+            options={{
+                title: "Detail Goal Today",
+                presentation:"modal",
+                animation: "slide_from_bottom"
+            }}
+         />
+
+         
     </Stack>
   )
 }

@@ -7,6 +7,7 @@ import { router } from "expo-router";
 
 export default function GoalsToday() {
     const { isSuccess, data } = useUser()
+    console.log(data?.data?.daily_goals)
     if (data?.data?.goals_today === null) {
         return (
             <YStack
@@ -39,7 +40,26 @@ export default function GoalsToday() {
                 padding={30}
             >
                 <Image source={galonImg} width={100} h={100} />
-                <Text textAlign="center" fontSize={20} fontWeight={"bold"}>{goal.goal_amount} ml</Text>
+                <XStack
+                    justifyContent="space-between"
+                    gap={15}
+                    mt={10}
+                >
+                    <YStack>
+                        <Text textAlign="center" fontSize={13} fontWeight={"bold"}>{goal.goal_amount} ml</Text>
+                        <Text textAlign="center" fontSize={10} >Goal</Text>
+                    </YStack>
+                    <Text textAlign="center" fontSize={20} fontWeight={"bold"}>|</Text>
+                    <YStack>
+                        <Text textAlign="center" fontSize={13} fontWeight={"bold"}>{goal.remaining_water} ml</Text>
+                        <Text textAlign="center" fontSize={10} >Water remaining</Text>
+                    </YStack>
+                    <Text textAlign="center" fontSize={20} fontWeight={"bold"}>|</Text>
+                    <YStack>
+                        <Text textAlign="center" fontSize={13} fontWeight={"bold"}>{goal.total_water_intake} ml</Text>
+                        <Text textAlign="center" fontSize={10} >Water Intakes today</Text>
+                    </YStack>
+                </XStack>
                 <XStack
                     padding={10}
                     gap={20}
@@ -49,7 +69,7 @@ export default function GoalsToday() {
                     flexDirection="row"
                 >
                     <Button width={"40%"} onPress={()=>router.push("/home/create")} mt={10}>Atur</Button>
-                    <Button width={"40%"} onPress={()=>router.push("/home/create")} mt={10}>Detail</Button>
+                    <Button width={"40%"} onPress={()=>router.push("/home/daily_goal/"+goal.id)} mt={10}>Detail</Button>
                     {/* <Button onPress={()=>router.push("/home/create")} mt={10}>Atur Daily goals</Button> */}
                 </XStack>
             </YStack>
