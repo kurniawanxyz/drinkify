@@ -1,10 +1,6 @@
-import { router, useLocalSearchParams } from 'expo-router'
-import { Card, Image, Input, ScrollView, Text, View, XStack, YStack } from 'tamagui'
-import { useDeleteWaterIntake, useDetailDailyGoal } from '../../../../hooks/useDailyGoal'
-import { Button } from '../../../../components';
-import { useAddWaterIntake } from '../../../../hooks/useWaterIntake';
-import { useState } from 'react';
-import { useUser } from '../../../../hooks/useUser';
+import { useLocalSearchParams } from 'expo-router'
+import { Card, Image, ScrollView, Text, View, XStack, YStack } from 'tamagui'
+import { useDetailDailyGoal } from '../../../../hooks/useDailyGoal'
 import { format } from 'date-fns';
 import { galonImg } from '../../../../assets';
 

@@ -20,14 +20,33 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.kaitodecode.drinkify"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
       "expo-router",
-      "expo-font"
-    ]
+      "expo-font",
+      [
+        "expo-notifications"
+      ]
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "cb028e70-df2a-4925-b209-f49f7a9e76e7"
+      }
+    },
+    "owner": "kaitodecode"
+  },
+  "doctor": {
+    "reactNativeDirectoryCheck": {
+      "exclude": ["@tamagui/babel-plugin", "@tamagui/config", "date-fns", "dotenv", "react-icons"]
+    }
   }
+
 }
