@@ -43,7 +43,7 @@ export default function HistoryRoute() {
                     <Text textAlign="center" fontSize={20} fontWeight={"bold"}>|</Text>
                     <YStack>
                         <Text textAlign="center" fontSize={13} fontWeight={"bold"}>{goal?.total_water_intake} ml</Text>
-                        <Text textAlign="center" fontSize={10} >Water Intakes today</Text>
+                        <Text textAlign="center" fontSize={10} >Water Intakes</Text>
                     </YStack>
                 </XStack>
             </YStack>
