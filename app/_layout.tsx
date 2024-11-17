@@ -8,6 +8,11 @@ import { ExpoQueryProvider } from "../providers/ExpoQueryProvider";
 
 export default function RootLayout() {
 
+  // App.js atau index.js
+
+// Firebase config
+
+
   useEffect(()=>{
     (async()=>{
       const token = await AsyncStorage.getItem("access_token");
@@ -27,6 +32,7 @@ export default function RootLayout() {
           >
               <Stack.Screen
                   name="index"
+                  
                   />
 
               <Stack.Screen

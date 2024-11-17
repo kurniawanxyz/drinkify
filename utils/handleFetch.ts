@@ -8,26 +8,28 @@ export default async function handleFetch<T>(
   url: string,
   config?: AxiosRequestConfig | null,
   isForm: boolean = false,
-  isShowToas: boolean = true,
+  isShowToast: boolean = true,
 ): Promise<ResponseJson<T>> {
-  const apiUrl = process.env.EXPO_PUBLIC_API + url;
+  const apiUrl = 'http://192.168.0.102:8000/api' + url;
   let configuration: AxiosRequestConfig = config || { method: "GET" };
 
   if (isForm) {
     configuration.headers = {
       ...configuration.headers,
-      'Content-Type': 'multipart/form-data',
+      "Content-Type": "multipart/form-data",
     };
   } else {
     configuration.headers = {
       ...configuration.headers,
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
+      Accept: "application/json",
     };
   }
 
-  const token = await AsyncStorage.getItem("access_token")
-  const expired_at = await AsyncStorage.getItem("expired_at")
+  const token = await AsyncStorage.getItem("access_token");
+  const expired_at = await AsyncStorage.getItem("expired_at");
   const today = new Date();
+
   if (expired_at) {
     const expiredDate = new Date(parseInt(expired_at));
     if (
@@ -35,79 +37,84 @@ export default async function handleFetch<T>(
       expiredDate.getMonth() === today.getMonth() &&
       expiredDate.getDate() === today.getDate()
     ) {
-
-      await AsyncStorage.removeItem("access_token")
-      await AsyncStorage.removeItem("expired_at")
+      await AsyncStorage.removeItem("access_token");
+      await AsyncStorage.removeItem("expired_at");
       router.push("/");
     }
   }
 
-
   if (token) {
     configuration.headers = {
       ...configuration.headers,
-      'Authorization': `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,
     };
   }
 
+  try {
+    const response = await axios<ResponseJson<T>>(apiUrl, configuration);
+    console.log(response);
 
-
-  return await axios<ResponseJson<T>>(apiUrl, configuration)
-    .then(response => {
-      // Check if the status code is in the successful range (2xx)
-      if (response.status >= 200 && response.status < 300) {
-        if(isShowToas){
-          Toast.show({
-            text1: "Success",
-            text2: response.data.message,
-            type: 'success',
-          });
-        }
-      } else {
-        // Handle unsuccessful responses (non-2xx status)
-        const errorMessage = typeof response.data.errors !== "string"
-          ? response.data.errors[0]
-          : response.data.message;
-
+    if (response.status >= 200 && response.status < 300) {
+      if (isShowToast) {
         Toast.show({
-          text1: "Error",
-          text2: errorMessage,
-          type: 'error',
+          text1: "Success",
+          text2: response.data.message,
+          type: "success",
         });
       }
+    } else {
+      const errorMessage =
+        typeof response.data.errors !== "string"
+          ? response.data.errors?.[0] || "An error occurred."
+          : response.data.message;
+      Toast.show({
+        text1: "Error",
+        text2: errorMessage,
+        type: "error",
+      });
+    }
 
-      return response.data;
-    })
-    .catch(async error => {
-      console.log(error.response.data)
-      if (error.status == "422") {
+    return response.data;
+  } catch (error: any) {
+    if (error.response) {
+      // Handle HTTP errors
+      const status = error.response.status;
+      console.log({status})
+      if (status === 422) {
         for (const key in error.response.data.errors) {
           if (Object.prototype.hasOwnProperty.call(error.response.data.errors, key)) {
+
             const element = error.response.data.errors[key];
             Toast.show({
-              text1: (`${key}`),
+              text1: `${key}`,
               text2: element,
-              type: 'error',
+              type: "error",
             });
-
+            
           }
         }
-
-      } else if(error.status == "401"){
+      } else if (status === 401) {
         await AsyncStorage.removeItem("access_token");
         await AsyncStorage.removeItem("expired_at");
-        router.push("/")
+        router.push("/");
       } else {
-        const errorMessage = error?.response?.data?.message || "An unexpected error occurred.";
+        const errorMessage = error.response.data?.message || "An unexpected error occurred.";
         Toast.show({
           text1: "Error",
           text2: errorMessage,
-          type: 'error',
+          type: "error",
         });
       }
-      // Handle any network or Axios errors
+    } else {
+      console.log(error)
+      // Handle network or other errors
+      Toast.show({
+        text1: "Error",
+        text2: error.message || "An unexpected error occurred.",
+        type: "error",
+      });
+    }
 
-      // Optionally throw the error if needed or return a fallback value
-      throw error;
-    });
+    throw error; // Optionally re-throw for further handling
+  }
 }

@@ -12,4 +12,14 @@ export type User = {
     goals_success: number,
     goals_failed: number,
     average_water_intakes: number,
+    notifications: Notification[],
+}
+
+export type Notification = {
+    id: number,
+    user_id: number,
+    title: string,
+    content: string,
+    created_at: string,
+    updated_at: string
 }

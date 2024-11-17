@@ -4,7 +4,12 @@ import { Button } from '../../../components'
 export default function HomeLayout() {
   return (
     <Stack>
-        <Stack.Screen name='index'/>
+        <Stack.Screen 
+            name='index'
+            options={{
+                title: "Home"
+            }}
+            />
         <Stack.Screen
             name='create'
             

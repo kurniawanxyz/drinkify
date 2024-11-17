@@ -28,3 +28,16 @@ export function useDeleteGoalToday()
         onSuccess: ()=> queryClient.invalidateQueries({queryKey:["user"]})
     })
 }
+
+
+export function useDeleteRemainder(){
+    return useMutation({
+        mutationKey: ["user"],
+        mutationFn: (idWaterIntakes: string)=> handleFetch("/notifications/"+idWaterIntakes,{method:"DELETE"}),
+        onSuccess:()=>{
+            queryClient.invalidateQueries({
+                queryKey: ["user"]
+            })
+        }
+    })
+}

@@ -10,13 +10,15 @@
     "newArchEnabled": true,
     "splash": {
       "image": "./assets/splash-icon.png",
-      "resizeMode": "contain",
+      "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.kaitodecode.drinkify"
     },
     "android": {
+      "googleServiceFile": "./google-service.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -45,8 +47,13 @@
   },
   "doctor": {
     "reactNativeDirectoryCheck": {
-      "exclude": ["@tamagui/babel-plugin", "@tamagui/config", "date-fns", "dotenv", "react-icons"]
+      "exclude": [
+        "@tamagui/babel-plugin",
+        "@tamagui/config",
+        "date-fns",
+        "dotenv",
+        "react-icons"
+      ]
     }
   }
-
 }

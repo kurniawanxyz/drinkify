@@ -5,6 +5,8 @@ import {format} from "date-fns"
 import { Button } from '../elements'
 import { galonImg } from '../../assets'
 import { router } from 'expo-router'
+import FaIcon from "@expo/vector-icons/FontAwesome"
+
 export default function ListDailyGoals() {
 
     const { isSuccess, data } = useUser()
@@ -44,7 +46,7 @@ export default function ListDailyGoals() {
                         isSuccess &&  dailyGoals?.map((item)=>(
                             <XStack
                                 key={item.id}
-                                backgroundColor={"$blue5Light"}
+                                backgroundColor={"$blue2Light"}
                                 px={20}
                                 py={"$3"}
                                 borderRadius={"$3"}
@@ -52,7 +54,10 @@ export default function ListDailyGoals() {
                                 justifyContent='space-between'
                                 alignItems='center'
                             >
-                                <Text>{format(item.created_at, "EEEE, dd MMMM yyyy")}</Text>
+                                <XStack alignItems='center' gap={10}>
+                                    <FaIcon name='calendar' size={15}/>
+                                    <Text>{format(item.created_at, "EEEE, dd MMMM yyyy")}</Text>
+                                </XStack>
                                 <Button onPress={()=> router.push("/home/history/"+item.id)}>Detail</Button>
                             </XStack>
                         ))

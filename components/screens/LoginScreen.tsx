@@ -19,8 +19,8 @@ export default function LoginScreen() {
                 method: "POST",
                 data: data,
             })
-
-            console.log(response.data?.token)
+            console.log("tes")
+            console.log({response})
             if (response.success) {
              await AsyncStorage.setItem("access_token", response.data?.token as string)
              await AsyncStorage.setItem("expired_at", response.data?.expired_at as string)
