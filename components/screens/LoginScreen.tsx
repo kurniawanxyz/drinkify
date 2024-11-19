@@ -42,6 +42,7 @@ export default function LoginScreen() {
             <View
                 backgroundColor={"$blue11Light"}
                 borderRadius={"$12"}
+                overflow='hidden'
             >
                 <Image src={LogoImg} width={100} height={100} />
             </View>

@@ -6,6 +6,7 @@ import { Button } from '../elements';
 import { galonImg } from '../../assets';
 import { router } from 'expo-router';
 import FaIcon from '@expo/vector-icons/FontAwesome';
+import { DailyGoal } from '../../type/DailyGoal';
 
 export default function ListDailyGoals() {
   const { isSuccess, data } = useUser();
@@ -34,7 +35,7 @@ export default function ListDailyGoals() {
 }
 
 // Komponen untuk tampilan kartu
-function HistoryCard({ item }: { item: any }) {
+function HistoryCard({ item }: { item: DailyGoal }) {
   return (
     <Card>
             <YStack

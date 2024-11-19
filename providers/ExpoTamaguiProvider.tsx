@@ -11,8 +11,8 @@ export default function ExpoTamaguiProvider({children}: {children: ReactNode}) {
 
   return (
     // add this
-    <TamaguiProvider config={tamaguiConfig} defaultTheme={'dark'}>
-      <ThemeProvider value={DarkTheme}>
+    <TamaguiProvider config={tamaguiConfig} defaultTheme={colorScheme!}>
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         {children}
       </ThemeProvider>
     </TamaguiProvider>

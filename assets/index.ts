@@ -1,4 +1,4 @@
-const LogoImg = require("./logo.png");
+const LogoImg = require("./icon.png");
 const galonImg = require("./galon.png");
 
 export {
