@@ -1,77 +1,143 @@
-import { router } from 'expo-router'
-import React from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { Card, ScrollView, Text, View, XStack, YStack } from 'tamagui'
-import { useUser } from '../../hooks/useUser'
-import { Button } from '../../components'
-import { handleFetch } from '../../utils'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import FaIcon from '@expo/vector-icons/FontAwesome'
+import { router } from 'expo-router';
+import React from 'react';
+import { ScrollView, Text, XStack, YStack, Card, useTheme } from 'tamagui';
+import { useUser } from '../../hooks/useUser';
+import { Button } from '../../components';
+import { handleFetch } from '../../utils';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import FaIcon from '@expo/vector-icons/FontAwesome';
+
+type User = {
+  name: string;
+  email: string;
+  goals_success: number;
+  goals_failed: number;
+  average_water_intakes: number;
+};
 
 export default function ProfileRoute() {
-  const { data, isSuccess } = useUser()
+  const { data, isSuccess } = useUser();
+  const theme = useTheme();
 
   async function handleLogout() {
-    const response = await handleFetch("/auths/logout", { method: "POST" })
+    const response = await handleFetch('/auths/logout', { method: 'POST' });
     if (response.success) {
-      await AsyncStorage.multiRemove(["access_token", "expired_at"])
-      router.push("/")
+      await AsyncStorage.multiRemove(['access_token', 'expired_at']);
+      router.push('/');
     }
   }
 
   if (isSuccess) {
+    const user = data?.data;
+
     return (
-      <ScrollView padding={20}>
+      <ScrollView padding={20} backgroundColor={theme.background}>
         {/* Profile Info Section */}
-        <Card padding={20} backgroundColor="$background" borderRadius={16} shadowColor="$shadow" shadowRadius={12}>
-          <YStack gap={8} alignItems="center">
-            <Text fontSize={22} fontWeight="600" color="$primary">
-              {data.data?.name}
+        <Card
+          padding={25}
+          backgroundColor={theme.backgroundStrong}
+          borderRadius={16}
+          shadowColor={theme.shadowColor}
+          shadowRadius={12}
+          shadowOpacity={0.2}
+          alignItems="center"
+        >
+          <FaIcon name="user-circle" size={80} color={theme.primary as any} />
+          <YStack gap={5} alignItems="center" mt={15}>
+            <Text fontSize={22} fontWeight="600" color={theme.primary}>
+              {user?.name}
             </Text>
-            <Text fontSize={16} color="$gray500">
-              {data.data?.email}
+            <Text fontSize={16} color={theme.colorMuted}>
+              {user?.email}
             </Text>
           </YStack>
         </Card>
 
+        {/* Stats Section */}
+        <YStack marginTop={30} gap={20}>
+          <Text fontSize={18} fontWeight="600" color={theme.primary}>
+            Stats Overview
+          </Text>
+          <XStack justifyContent="space-between" gap={20}>
+            <StatCard
+              title="Goal Success"
+              value={user?.goals_success ?? 0}
+              icon="trophy"
+              color={"$blue10"}
+              backgroundColor={"$blue8"}
+            />
+            <StatCard
+              title="Goal Failed"
+              value={user?.goals_failed ?? 0}
+              icon="times-circle"
+              color="$yellow10"
+              backgroundColor={"$yellow8"}
+            />
+            <StatCard
+              title="Avg Water Intake"
+              value={`${user?.average_water_intakes ?? 0} ml`}
+              icon="tint"
+              color={"$green10"}
+              backgroundColor={"$green8"}
+            />
+          </XStack>
+        </YStack>
+
         {/* Logout Button */}
-        <XStack marginTop={20} justifyContent="flex-end">
+        <XStack marginTop={40} justifyContent="center">
           <Button
-            backgroundColor="$red10Light"
             onPress={handleLogout}
-            pressStyle={{ backgroundColor: "$red11Light" }}
-            icon={<FaIcon name="sign-out" size={18} color="#fff" />}
-            size="small"
+            backgroundColor={theme.red10}
+            pressStyle={{ backgroundColor: theme.red11 }}
+            icon={<FaIcon name="sign-out" size={18}  />}
+            size="large"
+            color={theme.color}
           >
             Logout
           </Button>
         </XStack>
-
-        {/* Stats Section */}
-        <YStack marginTop={20} gap={16}>
-          <XStack justifyContent="space-between" gap={20}>
-            <Card flex={1} justifyContent="center" alignItems="center" padding={15} borderRadius={12} backgroundColor="$blue5Light" shadowColor="$blue500" shadowOpacity={0.1}>
-              <FaIcon name="trophy" size={24} color="$blue500" />
-              <Text fontWeight="bold" lineBreakMode='clip'  fontSize={14} color="$blue500">{data.data?.goals_success}</Text>
-              <Text fontSize={12} color="$blue500" mt={5}>Goal Success</Text>
-            </Card>
-
-            <Card flex={1} justifyContent="center" alignItems="center" padding={15} borderRadius={12} backgroundColor="$yellow5Light" shadowColor="$yellow500" shadowOpacity={0.1}>
-              <FaIcon name="times-circle" size={24} color="$yellow500" />
-              <Text fontWeight="bold" lineBreakMode='clip'  fontSize={14} color="$yellow500">{data.data?.goals_failed}</Text>
-              <Text fontSize={12} color="$yellow500" mt={5}>Goal Failed</Text>
-            </Card>
-
-            <Card flex={1} justifyContent="center" alignItems="center" padding={15} borderRadius={12} backgroundColor="$green5Light" shadowColor="$green500" shadowOpacity={0.1}>
-              <FaIcon name="tint" size={24} color="$green500" />
-              <Text fontWeight="bold" lineBreakMode='clip'  fontSize={14}  color="$green500">{data.data?.average_water_intakes} ml</Text>
-              <Text fontSize={10} color="$green500" mt={5}>Avg Water Intake</Text>
-            </Card>
-          </XStack>
-        </YStack>
       </ScrollView>
-    )
+    );
   }
 
-  return null
+  return null;
+}
+
+// Komponen Stat Card
+type StatCardProps = {
+  title: string;
+  value: string | number;
+  icon: string;
+  color: string;
+  backgroundColor: string;
+};
+
+function StatCard({
+  title,
+  value,
+  icon,
+  color,
+  backgroundColor,
+}: StatCardProps) {
+  return (
+    <Card
+      flex={1}
+      justifyContent="center"
+      alignItems="center"
+      padding={20}
+      borderRadius={12}
+      backgroundColor={backgroundColor}
+      shadowColor={color}
+      shadowOpacity={0.2}
+      shadowRadius={4}
+    >
+      <FaIcon name={icon as any} size={28} color={color} />
+      <Text fontWeight="bold" fontSize={16} color={color} mt={10}>
+        {value}
+      </Text>
+      <Text fontSize={12} color={color} mt={5}>
+        {title}
+      </Text>
+    </Card>
+  );
 }

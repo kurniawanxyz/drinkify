@@ -1,84 +1,94 @@
-import React from 'react'
-import { Heading, Image, Text, View, XStack, YStack } from 'tamagui'
-import { useUser } from '../../hooks/useUser'
-import {format} from "date-fns"
-import { Button } from '../elements'
-import { galonImg } from '../../assets'
-import { router } from 'expo-router'
-import FaIcon from "@expo/vector-icons/FontAwesome"
+import React from 'react';
+import { Card, Heading, Image, Text, View, XStack, YStack } from 'tamagui';
+import { useUser } from '../../hooks/useUser';
+import { format } from 'date-fns';
+import { Button } from '../elements';
+import { galonImg } from '../../assets';
+import { router } from 'expo-router';
+import FaIcon from '@expo/vector-icons/FontAwesome';
 
 export default function ListDailyGoals() {
+  const { isSuccess, data } = useUser();
 
-    const { isSuccess, data } = useUser()
+  if (!isSuccess || !data) return null;
 
-    if (data?.data?.daily_goals === null) {
-        return (
+  const dailyGoals = data.data?.daily_goals?.slice(1) || [];
+
+  return (
+    <YStack mt={20} px={8} space>
+      <Heading fontSize={18} fontWeight="bold" color="$color">
+        History Daily Goals
+      </Heading>
+
+      {dailyGoals.length === 0 ? (
+        <EmptyState />
+      ) : (
+        <YStack gap={15}>
+          {dailyGoals.map((item) => (
+            <HistoryCard key={item.id} item={item} />
+          ))}
+        </YStack>
+      )}
+    </YStack>
+  );
+}
+
+// Komponen untuk tampilan kartu
+function HistoryCard({ item }: { item: any }) {
+  return (
+    <Card>
             <YStack
-                mt={10}
-            >
-                <Heading
-                    fontSize={15}
-                    fontWeight={"bold"}
-                >
-                    History Daily Goals
-                </Heading>
-            </YStack>
-        )
-    }
+      backgroundColor="$backgroundSoft"
+      borderRadius="$4"
+      shadowColor="$shadowColor"
+      shadowOpacity={0.1}
+      shadowRadius={4}
+      shadowOffset={{ width: 0, height: 2 }}
+      px={20}
+      py={15}
+      space={10}
+    >
+      <XStack alignItems="center" gap={10}>
+        <FaIcon name="calendar" size={18} color="$colorMuted" />
+        <Text fontSize={16} fontWeight="bold" color="$color">
+          {format(new Date(item.created_at), 'EEEE, dd MMMM yyyy')}
+        </Text>
+      </XStack>
+      <Text fontSize={14} color="$colorMuted">
+        Keep track of your daily water goals and stay hydrated.
+      </Text>
+      <XStack justifyContent="space-between" alignItems="center">
+        <Text fontSize={15} fontWeight="bold" color="$blue10">
+          {item.goal_amount} ml
+        </Text>
+        <Button
+          size="$4"
+          backgroundColor="$blue10"
+          pressStyle={{ backgroundColor: '$blue11' }}
+          onPress={() => router.push(`/home/history/${item.id}`)}
+        >
+          Detail
+        </Button>
+      </XStack>
+    </YStack>
+    </Card>
+  );
+}
 
-    if(isSuccess){
-        const dailyGoals = data.data?.daily_goals.slice(1)
-        console.log({dailyGoals})
-        return (
-            <YStack
-                mt={20}
-            >
-                <Heading
-                    fontSize={15}
-                    fontWeight={"bold"}
-                >
-                    History Daily Goals
-                </Heading>
-                <YStack
-                    gap={10}
-                >
-                    {
-                        isSuccess &&  dailyGoals?.map((item)=>(
-                            <XStack
-                                key={item.id}
-                                backgroundColor={"$blue2Light"}
-                                px={20}
-                                py={"$3"}
-                                borderRadius={"$3"}
-                                flex={1}
-                                justifyContent='space-between'
-                                alignItems='center'
-                            >
-                                <XStack alignItems='center' gap={10}>
-                                    <FaIcon name='calendar' size={15}/>
-                                    <Text>{format(item.created_at, "EEEE, dd MMMM yyyy")}</Text>
-                                </XStack>
-                                <Button onPress={()=> router.push("/home/history/"+item.id)}>Detail</Button>
-                            </XStack>
-                        ))
-                    }
-                </YStack>
-                {
-                    dailyGoals?.length === 0 && (
-                        <View
-                            backgroundColor={"$blue5Light"}
-                            padding={30}
-                            borderRadius={"$3"}
-                            justifyContent='center'
-                            alignItems='center'
-                        >
-                            <Image src={galonImg} h={75} w={75}/>
-                            <Text mt={10}>Belum memiliki data daily goals</Text>
-                        </View>
-                    )
-                }
-            </YStack>
-        )
-    }
-
+// Komponen untuk keadaan kosong
+function EmptyState() {
+  return (
+    <View
+      backgroundColor="$backgroundSoft"
+      padding={30}
+      borderRadius="$4"
+      alignItems="center"
+      justifyContent="center"
+    >
+      <Image src={galonImg} width={75} height={75} />
+      <Text mt={10} fontSize={16} color="$colorMuted" textAlign="center">
+        You don’t have any daily goals yet.
+      </Text>
+    </View>
+  );
 }

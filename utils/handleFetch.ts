@@ -10,7 +10,7 @@ export default async function handleFetch<T>(
   isForm: boolean = false,
   isShowToast: boolean = true,
 ): Promise<ResponseJson<T>> {
-  const apiUrl = 'http://192.168.0.102:8000/api' + url;
+  const apiUrl = 'https://www.dringkify.kaitodecode.com/api' + url;
   let configuration: AxiosRequestConfig = config || { method: "GET" };
 
   if (isForm) {
