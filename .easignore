@@ -10,7 +10,6 @@ web-build/
 expo-env.d.ts
 android/
 .env 
-google-services.json
 
 # Native
 *.orig.*
@@ -38,4 +37,3 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
-google-service.json
